@@ -1,0 +1,83 @@
+using System;
+
+public class LibraryItem
+{
+    public string Title { get; set; }
+    public string Author { get; set; }
+    public int Year { get; set; }
+
+    public LibraryItem(string title, string author, int year)
+    {
+        Title = title;
+        Author = author;
+        Year = year;
+    }
+}
+
+public class Book : LibraryItem
+{
+    public int PageCount { get; set; }
+    public string ISBN { get; set; }
+
+    public Book(string title, string author, int year, int pageCount, string isbn)
+        : base(title, author, year)
+    {
+        PageCount = pageCount;
+        ISBN = isbn;
+    }
+}
+
+public class Magazine : LibraryItem
+{
+    public int IssueNumber { get; set; }
+    public string Frequency { get; set; }
+
+    public Magazine(string title, string author, int year, int issueNumber, string frequency)
+        : base(title, author, year)
+    {
+        IssueNumber = issueNumber;
+        Frequency = frequency;
+    }
+}
+
+public class DVD : LibraryItem
+{
+    public int Duration { get; set; }
+    public string Rating { get; set; }
+
+    public DVD(string title, string author, int year, int duration, string rating)
+        : base(title, author, year)
+    {
+        Duration = duration;
+        Rating = rating;
+    }
+}
+
+public class Audiobook : LibraryItem
+{
+    public int Duration { get; set; }
+    public string Narrator { get; set; }
+
+    public Audiobook(string title, string author, int year, int duration, string narrator)
+        : base(title, author, year)
+    {
+        Duration = duration;
+        Narrator = narrator;
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        Book book = new Book("Код да Винчи", "Дэн Браун", 2003, 454, "978-5-699-01368-5");
+        Magazine magazine = new Magazine("National Geographic", "Редакция", 2024, 3, "Ежемесячный");
+        DVD dvd = new DVD("Начало", "Кристофер Нолан", 2010, 148, "PG-13");
+        Audiobook audiobook = new Audiobook("Гарри Поттер и философский камень", "Джоан Роулинг", 1997, 525, "Александр Клюквин");
+
+        Console.WriteLine($"Книга: {book.Title}, Автор: {book.Author}, Страниц: {book.PageCount}, ISBN: {book.ISBN}\n");
+        Console.WriteLine($"Журнал: {magazine.Title}, Выпуск: {magazine.IssueNumber}, Периодичность: {magazine.Frequency}\n");
+        Console.WriteLine($"DVD: {dvd.Title}, Продолжительность: {dvd.Duration} мин, Рейтинг: {dvd.Rating}\n");
+        Console.WriteLine($"Аудиокнига: {audiobook.Title}, Диктор: {audiobook.Narrator}, Длительность: {audiobook.Duration} мин");
+    }
+}
