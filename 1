@@ -1,0 +1,85 @@
+1using System;
+namespace ConsoleApp3
+{
+    class Employee
+    {
+        public string Name { get; set; }
+        public string Position { get; set; }
+        public int Salary { get; set; }
+        public DateTime HireDate { get; set; }
+        public Employee(string name, string position, int salary, DateTime hireDate)
+        {
+            Name = name;
+            Position = position;
+            Salary = salary;
+            HireDate = hireDate;
+        }
+        public virtual void ShowInfo()
+        {
+            Console.WriteLine($"Имя: {Name}, Должность: {Position}, Зарплата: {Salary}, Дата приёма: {HireDate.ToShortDateString()}");
+        }
+    }
+    class Manager : Employee
+    {
+        public int TeamSize { get; set; }
+
+        public Manager(string name, int salary, DateTime hireDate, int teamSize)
+            : base(name, "Менеджер", salary, hireDate)
+        {
+            TeamSize = teamSize;
+        }
+
+        public void Meet()
+        {
+            Console.WriteLine($"{Name} проводит собрание для {TeamSize} человек.");
+        }
+    }
+    class Developer : Employee
+    {
+        private string? programLange;
+
+        public string ProgramLang { get; set; }
+
+        public Developer(string name, int salary, DateTime hireDate, string programLang)
+            : base(name, "Разработчик", salary, hireDate)
+        {
+            ProgramLang = programLange;
+        }
+        public void WriteCode()
+        {
+            Console.WriteLine($"{Name} пишет код на {ProgramLang}.");
+        }
+    }
+    class Director : Employee
+    {
+        public string Department { get; set; }
+
+        public Director(string name, int salary, DateTime hireDate, string department)
+            : base(name, "Директор", salary, hireDate)
+        {
+            Department = department;
+        }
+        public void ApproveBudget()
+        {
+            Console.WriteLine($"{Name} утвердил бюджет отдела {Department}.");
+        }
+    }
+    class Program
+    {
+        static void Main()
+        {
+            Manager manager = new Manager("Иван", 100000, DateTime.Now.AddYears(-2), 5);
+            Developer dev = new("Михаил", 90000, hireDate: DateTime.Now.AddYears (), "C#");
+            Director dir = new Director("Олег", 150000, DateTime.Now.AddYears(-5), "Java");
+
+            manager.ShowInfo();
+            manager.Meet();
+
+            dev.ShowInfo();
+            dev.WriteCode();
+
+            dir.ShowInfo();
+            dir.ApproveBudget();
+        }
+    }
+}
