@@ -1,0 +1,117 @@
+using System;
+using System;
+public class Animal
+{
+    public string Species { get; set; }
+    public int Age { get; set; }
+    public string Habitat { get; set; }
+    public string Diet { get; set; }
+
+    public Animal(string species, int age, string habitat, string diet)
+    {
+        Species = species;
+        Age = age;
+        Habitat = habitat;
+        Diet = diet;
+    }
+    public virtual void PrintInfo()
+    {
+        Console.WriteLine($"Вид: {Species}");
+        Console.WriteLine($"Возраст: {Age} лет");
+        Console.WriteLine($"Среда обитания: {Habitat}");
+        Console.WriteLine($"Рацион: {Diet}");
+    }
+}
+public class Mammal : Animal
+{
+    public string FurType { get; set; }
+    public int GestationPeriod { get; set; }
+    public Mammal(string species, int age, string habitat, string diet,
+                 string furType, int gestationPeriod)
+                 : base(species, age, habitat, diet)
+    {
+        FurType = furType;
+        GestationPeriod = gestationPeriod;
+    }
+    public override void PrintInfo()
+    {
+        base.PrintInfo();
+        Console.WriteLine($"Тип меха: {FurType}");
+        Console.WriteLine($"Продолжительность беременности: {GestationPeriod} дней");
+    }
+}
+public class Bird : Animal
+{
+    public double Wingspan { get; set; }
+    public string NestingType { get; set; }
+    public Bird(string species, int age, string habitat, string diet,
+               double wingspan, string nestingType)
+               : base(species, age, habitat, diet)
+    {
+        Wingspan = wingspan;
+        NestingType = nestingType;
+    }
+    public override void PrintInfo()
+    {
+        base.PrintInfo();
+        Console.WriteLine($"Размах крыльев: {Wingspan} м");
+        Console.WriteLine($"Тип гнездования: {NestingType}");
+    }
+}
+public class Reptile : Animal
+{
+    public string SkinType { get; set; }
+    public double EnvironmentTemperature { get; set; }
+    public Reptile(string species, int age, string habitat, string diet,
+                  string skinType, double environmentTemperature)
+                  : base(species, age, habitat, diet)
+    {
+        SkinType = skinType;
+        EnvironmentTemperature = environmentTemperature;
+    }
+    public override void PrintInfo()
+    {
+        base.PrintInfo();
+        Console.WriteLine($"Тип кожи: {SkinType}");
+        Console.WriteLine($"Температура среды: {EnvironmentTemperature}°C");
+    }
+}
+public class Fish : Animal
+{
+    public string ScaleType { get; set; }
+    public double Depth { get; set; }
+    public Fish(string species, int age, string habitat, string diet,
+               string scaleType, double depth)
+               : base(species, age, habitat, diet)
+    {
+        ScaleType = scaleType;
+        Depth = depth;
+    }
+    public override void PrintInfo()
+    {
+        base.PrintInfo();
+        Console.WriteLine($"Тип чешуи: {ScaleType}");
+        Console.WriteLine($"Глубина обитания: {Depth} м");
+    }
+}
+public class Program
+{
+    public static void Main()
+    {
+        Console.WriteLine("Каталог животных зоопарка:\n");
+        Mammal lion = new Mammal("Лев", 5, "Саванна", "Плотоядный", "Короткий", 110);
+        Bird eagle = new Bird("Орел", 3, "Горы", "Плотоядный", 2.1, "На деревьях");
+        Reptile snake = new Reptile("Питон", 2, "Джунгли", "Плотоядный", "Чешуйчатая", 28.5);
+        Fish shark = new Fish("Акула", 8, "Океан", "Плотоядный", "Плакоидная", 300);
+        Mammal bear = new Mammal("Бурый медведь", 7, "Лес", "Всеядный", "Густой", 220);
+        Console.WriteLine("Млекопитающие::");
+        lion.PrintInfo();
+        bear.PrintInfo();
+        Console.WriteLine("Птицы:");
+        eagle.PrintInfo();
+        Console.WriteLine("Рептилии:");
+        snake.PrintInfo();
+        Console.WriteLine("Рыбы:");
+        shark.PrintInfo();
+    }
+}
