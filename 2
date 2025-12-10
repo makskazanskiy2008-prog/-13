@@ -1,0 +1,192 @@
+using System;
+
+public abstract class BankAccount
+{
+    public string AccountNumber { get; protected set; }
+    public decimal Balance { get; protected set; }
+    public string Owner { get; protected set; }
+
+    public BankAccount(string accountNumber, decimal balance, string owner)
+    {
+        AccountNumber = accountNumber;
+        Balance = balance;
+        Owner = owner;
+    }
+
+    public virtual void Deposit(decimal amount)
+    {
+        if (amount <= 0)
+        {
+            Console.WriteLine("Ошибка: Сумма депозита должна быть положительной!");
+            return;
+        }
+        Balance += amount;
+        Console.WriteLine($"Внесено: {amount} руб. Баланс: {Balance} руб.");
+    }
+
+    public virtual void Withdraw(decimal amount)
+    {
+        if (amount <= 0)
+        {
+            Console.WriteLine("Ошибка: Сумма должна быть положительной!");
+            return;
+        }
+
+        if (amount <= Balance)
+        {
+            Balance -= amount;
+            Console.WriteLine($"Снято: {amount} руб. Баланс: {Balance} руб.");
+        }
+        else
+        {
+            Console.WriteLine("Ошибка: Недостаточно средств!");
+        }
+    }
+
+    public virtual void DisplayAccountInfo()
+    {
+        Console.WriteLine($"Счет: {AccountNumber}");
+        Console.WriteLine($"Владелец: {Owner}");
+        Console.WriteLine($"Баланс: {Balance} руб.");
+    }
+}
+
+public class CheckingAccount : BankAccount
+{
+    public decimal OverdraftLimit { get; set; }
+
+    public CheckingAccount(string accountNumber, decimal balance, string owner, decimal overdraftLimit)
+        : base(accountNumber, balance, owner)
+    {
+        OverdraftLimit = overdraftLimit;
+    }
+
+    public override void Withdraw(decimal amount)
+    {
+        if (amount <= 0)
+        {
+            Console.WriteLine("Ошибка: Сумма должна быть положительной!");
+            return;
+        }
+
+        if (amount <= Balance + OverdraftLimit)
+        {
+            Balance -= amount;
+            Console.WriteLine($"Снято: {amount} руб. Баланс: {Balance} руб.");
+        }
+        else
+        {
+            Console.WriteLine("Внимание: Превышен лимит овердрафта!");
+        }
+    }
+
+    public override void DisplayAccountInfo()
+    {
+        base.DisplayAccountInfo();
+        Console.WriteLine($"Тип аккаунта: Текущий счет");
+        Console.WriteLine($"Лимит овердрафта: {OverdraftLimit} руб.");
+    }
+}
+
+public class SavingsAccount : BankAccount
+{
+    public decimal InterestRate { get; set; }
+
+    public SavingsAccount(string accountNumber, decimal balance, string owner, decimal interestRate)
+        : base(accountNumber, balance, owner)
+    {
+        InterestRate = interestRate;
+    }
+
+    public void ApplyInterest()
+    {
+        decimal interest = Balance * InterestRate / 100;
+        Balance += interest;
+        Console.WriteLine($"Начисленные проценты: {interest} руб. Баланс: {Balance} руб.");
+    }
+
+    public override void DisplayAccountInfo()
+    {
+        base.DisplayAccountInfo();
+        Console.WriteLine("Тип аккаунта: Сберегательный счет");
+        Console.WriteLine($"Процентная ставка: {InterestRate}%");
+    }
+}
+
+public class CreditAccount : BankAccount
+{
+    public decimal CreditLimit { get; set; }
+    public DateTime RepaymentDate { get; set; }
+
+    public CreditAccount(string accountNumber, decimal balance, string owner, DateTime repaymentDate, decimal creditLimit)
+        : base(accountNumber, balance, owner)
+    {
+        RepaymentDate = repaymentDate;
+        CreditLimit = creditLimit;
+    }
+
+    public override void Withdraw(decimal amount)
+    {
+        if (amount <= 0)
+        {
+            Console.WriteLine("Ошибка: Сумма должна быть положительной!");
+            return;
+        }
+
+        if (Balance - amount >= -CreditLimit)
+        {
+            Balance -= amount;
+            Console.WriteLine($"Снято: {amount} руб. Баланс: {Balance} руб.");
+        }
+        else
+        {
+            Console.WriteLine("Ошибка: Превышен кредитный лимит!");
+        }
+    }
+
+
+    public void CheckRepayment()
+    {
+        if (DateTime.Now > RepaymentDate)
+        {
+            Console.WriteLine("Внимание: Ваш срок погашения кредита истек!");
+        }
+        else
+        {
+            TimeSpan remaining = RepaymentDate - DateTime.Now;
+            Console.WriteLine($"До погашения кредита осталось: {remaining.Days} дней");
+        }
+    }
+
+    public override void DisplayAccountInfo()
+    {
+        base.DisplayAccountInfo();
+        Console.WriteLine("Тип аккаунта: Кредитный счет");
+        Console.WriteLine($"Кредитный лимит: {CreditLimit} руб.");
+        Console.WriteLine($"Дата погашения: {RepaymentDate:dd.MM.yyyy}");
+    }
+}
+
+class Program
+{
+    static void Main(string[] args)
+    {
+        CheckingAccount checking = new CheckingAccount("CHK12345", 1263, "Максим Ильин", 5000);
+        SavingsAccount savings = new SavingsAccount("SAV67890", 4267, "Артём Юрьевич", 10);
+        CreditAccount credit = new CreditAccount("CRD11111", -2357, "Пётр Лукин", new DateTime(2024, 12, 31), 10000);
+
+        checking.DisplayAccountInfo();
+        checking.Deposit(2500);
+        checking.Withdraw(4705);
+        Console.WriteLine();
+
+        savings.DisplayAccountInfo();
+        savings.ApplyInterest();
+        Console.WriteLine();
+
+        credit.DisplayAccountInfo();
+        credit.CheckRepayment();
+        credit.Deposit(2357);
+        credit.Deposit(1000);
+    }
+}
